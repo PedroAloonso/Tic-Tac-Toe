@@ -54,6 +54,7 @@ const Game = (() => {
         checkColumns()
         checkPrincipalDiagonal()
         checkSecundaryDiagonal()
+        tieCheck()
     }
 
     (marker = () => {
@@ -190,6 +191,17 @@ const Game = (() => {
                 break
             }
         } 
+    }
+
+    tieCheck = () => {
+        let count = 0
+        for (let i = 0; i < 9; i++) {
+            const tile = tiles[i];
+            if (tile.classList.contains('marked')) count++
+        }
+        if (count == 9) {
+            textDisplay.innerHTML = 'The game was a draw'
+        }
     }
     return {marker}
 })()
