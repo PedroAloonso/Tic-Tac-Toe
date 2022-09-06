@@ -17,32 +17,35 @@ const Grid = (() => {
     return {makeGrid, getTiles}
 })();
 
+const Player = (simbol, score) => {
+    const getSimbol = () => simbol
+    const getScore = () => score
 
+    const addScore = () => score++
+    const resetScore = () => score = 0
 
-const Player = (simbol) => {
-    return {simbol}
+    return {getScore, getSimbol, addScore}
 }
+
+const playerX = Player('X', 0);
+const playerO = Player('O', 0);
 
 const Game = (() => {
     Grid.makeGrid()
-    
 
-    const playerX = Player('X');
-    const playerO = Player('O');
-    
     let textDisplay = document.querySelector('#displayGame');
     textDisplay.innerHTML = 'Player X beginning';
     let tiles = document.querySelectorAll('.game p');
-    
     let count = 0;
+
     addMark = (e) => {
         if (e.target.classList.contains('marked') == false) {
             if (count % 2 == 0) {
                 textDisplay.innerHTML = 'Player O turn'
-                e.target.innerHTML = playerX.simbol;
+                e.target.innerHTML = playerX.getSimbol();
             } else {
                 textDisplay.innerHTML = 'Player X turn'
-                e.target.innerHTML = playerO.simbol;
+                e.target.innerHTML = playerO.getSimbol();
             }
             e.target.classList.add('marked');
             count++;
@@ -57,7 +60,7 @@ const Game = (() => {
         for (let i = 0; i < 9; i++) {
             tiles[i].addEventListener('click', addMark)
         }
-    })
+    })()
     
     clearEventListener = () => {
         for (let i = 0; i < tiles.length; i++) {
@@ -124,10 +127,12 @@ const Game = (() => {
             }
             if (row === 'XXX') {
                 textDisplay.innerHTML = 'Player X win'
+                playerX.addScore()
                 clearEventListener();
                 break
             } else if (row === 'OOO') {
                 textDisplay.innerHTML = 'Player O win'
+                playerO.addScore()
                 clearEventListener();
                 break
             }
@@ -186,10 +191,22 @@ const Game = (() => {
             }
         } 
     }
-
     return {marker}
 })()
 
-Game.marker();
-
-
+restartGridBtn = (() => {
+    let btn = document.querySelector('#restartGridBtn')
+    let tiles = document.querySelectorAll('.game p')
+    let textDisplay = document.querySelector('#displayGame');
+    
+    clearGrid = () => {
+        for (let i = 0; i < 9; i++) {
+            let tile = tiles[i];
+            tile.innerHTML = ''
+            tile.classList.remove('marked')
+        }
+        Game.marker()
+        textDisplay.innerHTML = 'Player X beginning';
+    }
+    btn.onclick = clearGrid
+})()

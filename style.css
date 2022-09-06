@@ -75,3 +75,15 @@ body {
     font-size: 100px;
     user-select: none;
 }
+
+.buttons {
+    margin-top: 35px;
+}
+
+#restartGridBtn {
+    padding: 12px;
+    color: var(--color1);
+    font-size: 15px;
+    font-weight: bold;
+}
+
